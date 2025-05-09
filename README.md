@@ -217,25 +217,6 @@ signal prev_output   : integer := 0;
 - `filtered`: Output that is passed to top_level.
 - `raw_val`, `smoothed_val`: Intermediate values for filtering.
 
-
-🔄 **Conversion Note:**
-```vhdl
-raw_val <= to_integer(unsigned(adc_do(15 downto 4)));  -- Extract upper 12 bits
-```
-- The lower 4 bits of `DO` are discarded.
-- Only bits 15 down to 4 are meaningful and this converts a 12-bit unsigned value to int.
-
-
-🧹 **Filtering Logic: IIR Low-Pass:**
-```vhdl
-smoothed_val <= (raw_val + (smoothed_val * 7)) / 8;
-
-```
-This is a **first-order Infinite Impulse Response (IIR)** filter:
-- Implements: `y[n] = (x[n] + 7 * y[n−1]) / 8`.
-- Smooths the signal by blending 87.5% of the previous output and 12.5% of the current input.
-
-    
  ⚙️ **XADC Instantiations:**
  ```vhdl
 u_xadc : XADC
@@ -261,7 +242,56 @@ u_xadc : XADC
 ```
 - Drives XADC with clock/reset and collects converted digital output.
 
+🔄 **Conversion Note:**
+```vhdl
+raw_val <= to_integer(unsigned(adc_do(15 downto 4)));  -- Extract upper 12 bits
+```
+- The lower 4 bits of `DO` are discarded.
+- Only bits 15 down to 4 are meaningful and this converts a 12-bit unsigned value to int.
 
+
+🧹 **Filtering Logic: IIR Low-Pass:**
+```vhdl
+smoothed_val <= (raw_val + (smoothed_val * 7)) / 8;
+
+```
+This is a **first-order Infinite Impulse Response (IIR)** filter:
+- Implements: `y[n] = (x[n] + 7 * y[n−1]) / 8`.
+- Smooths the signal by blending 87.5% of the previous output and 12.5% of the current input.
+```vhdl
+if abs(smoothed_val - prev_output) > threshold then
+  prev_output <= smoothed_val;
+end if;
+```
+
+- **Debounce threshold**: Ignores small fluctuations < 10mV (approx).
+- Prevents noise from updating the final output.
+- 
+🔄 **Output Mapping:**
+```vhdl
+ filtered <= std_logic_vector(to_signed(prev_output, 16));
+filtered_out <= filtered;
+
+```
+- Converts final filtered integer into a 16-bit signed vector.
+
+- Why 16 bits?
+
+ -- Keeps compatibility with display and system bus widths.
+ 
+ -- Ensures clean alignment with VHDL-wide standard integer types.
+ 
+ -- 12-bit ADC value fits safely into 16-bit signed format with room for potential scaling.
+
+📘 **Summary of Why and How:**
+
+ Aspect | Reason / Role | 
+|-------|-----------|
+| **XADC** | 	Samples analog signal (12-bit resolution) |
+| **raw_val** | extraction	Uses upper 12 bits (```adc_do(15 downto 4)```) |
+| **Smoothing filter** |	Low-pass filter to reduce jitter/noise |
+| **16-bit conversion** |	Ensures compatibility with system buses & display logic |
+| **Threshold check** |	Reduces flickering from minor signal changes |
 
 
 ## 5.`nexys_a7.xdc`
