@@ -43,7 +43,6 @@ This FPGA project demonstrates how to digitize and filter an analog signal using
 
 ## 🔍 File-by-File Breakdown
 
----
 
 ### 1.`top_level.vhd`
  🧩 **Role: System Integrator**
@@ -142,7 +141,8 @@ disp : display_unit
 - Drives visual hardware outputs.
 
 ---
-### 1.`processing_unit`
+
+## 1.`processing_unit`
 
 
 
