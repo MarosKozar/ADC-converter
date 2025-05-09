@@ -50,7 +50,6 @@ This FPGA project demonstrates how to digitize and filter an analog signal using
  - `processing_unit`: captures and filters the analog signal
  - `display_unit`: outputs the filtered result both digitally and visually
  
- ---
  
  🔌 **Interfaces**
  
@@ -62,8 +61,6 @@ This FPGA project demonstrates how to digitize and filter an analog signal using
  **Outputs**:
  - `leds`: 16-bit binary display of the filtered signal  
  - `seg_cat`, `seg_an`: 7-segment cathode/anode display drivers  
- 
- ---
  
   🧱 **Component Instantiations**
  ```vhdl
