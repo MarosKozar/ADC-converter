@@ -147,19 +147,17 @@ disp : display_unit
 ## nexys_A7
 
 🔍 Overview
-This XDC file is used in Xilinx Vivado projects to:
+--This XDC file is used in Xilinx Vivado projects to:
 
-Assign logical ports in your HDL design (e.g., Verilog/VHDL) to physical pins on the FPGA.
+-Assign logical ports in your HDL design (e.g., Verilog/VHDL) to physical pins on the FPGA.
 
-Define the I/O standard (electrical characteristics) for each port.
+-Define the I/O standard (electrical characteristics) for each port.
 
-Set up timing constraints (especially for clocks).
+-Set up timing constraints (especially for clocks).
 
-Most likely, this is for a board like the Basys 3 or Nexys A7, which includes:
+  Most likely, this is for a board like the Basys 3 or Nexys A7, which includes:
 
-A clock input
-
-16 LEDs
+  A clock input 16 LEDs
 
 A 4-digit 7-segment display
 
@@ -167,12 +165,11 @@ XADC analog input pins
 
 A reset button
 
-🕒 Clock and Timing
-tcl
-Zkopírovat
-Upravit
+--🕒 Clock and Timing
+```
 set_property -dict { PACKAGE_PIN E3 IOSTANDARD LVCMOS33 } [get_ports { clk }]
 create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports { clk }]
+```
 PACKAGE_PIN E3: Maps the clk input signal to physical FPGA pin E3.
 
 IOSTANDARD LVCMOS33: Uses the LVCMOS 3.3V voltage level standard.
@@ -186,9 +183,7 @@ Waveform {0 5} = 50% duty cycle (clock high for 5ns, low for 5ns).
 🧠 Why it's needed: Tells Vivado the timing characteristics of your clock source so it can perform proper static timing analysis.
 
 ⚡️ XADC Analog Inputs
-tcl
-Zkopírovat
-Upravit
+
 ```
 set_property -dict { PACKAGE_PIN A13 IOSTANDARD LVCMOS18 } [get_ports { vp_in }]
 set_property -dict { PACKAGE_PIN A14 IOSTANDARD LVCMOS18 } [get_ports { vn_in }]
@@ -201,9 +196,6 @@ LVCMOS18 = 1.8V logic standard — required for analog input compatibility.
 
 🔁 Reset Button
 ```
-tcl
-Zkopírovat
-Upravit
 set_property -dict { PACKAGE_PIN N17 IOSTANDARD LVCMOS33 } [get_ports { reset }]
 ```
 Assigns the reset signal (e.g., for resetting a state machine) to pin N17.
@@ -214,9 +206,6 @@ Standard 3.3V logic.
 
 🔢 7-Segment Display - Anodes
 ```
-tcl
-Zkopírovat
-Upravit
 set_property -dict { PACKAGE_PIN J17 IOSTANDARD LVCMOS33 } [get_ports { seg_an[0] }]
 set_property -dict { PACKAGE_PIN J18 IOSTANDARD LVCMOS33 } [get_ports { seg_an[1] }]
 set_property -dict { PACKAGE_PIN T9  IOSTANDARD LVCMOS33 } [get_ports { seg_an[2] }]
@@ -232,9 +221,6 @@ Active-low typically: driving low enables that digit.
 
 🔠 7-Segment Display - Cathodes
 ```
-tcl
-Zkopírovat
-Upravit
 set_property -dict { PACKAGE_PIN T10 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[0] }]
 set_property -dict { PACKAGE_PIN R10 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[1] }]
 set_property -dict { PACKAGE_PIN K16 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[2] }]
@@ -251,7 +237,6 @@ When combined with an anode, lighting specific segments shows numbers or letters
 
 💡 LED Outputs
 ```
-tcl
 set_property -dict { PACKAGE_PIN H17 IOSTANDARD LVCMOS33 } [get_ports { leds[15] }]
 ...
 set_property -dict { PACKAGE_PIN V11 IOSTANDARD LVCMOS33 } [get_ports { leds[0] }]
