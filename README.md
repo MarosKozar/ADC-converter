@@ -341,7 +341,8 @@ It takes a **16-bit filtered signal** `from processing_unit`, interprets it as a
  | **Multiplexing Controller** |	Rapidly switches between 4 digits using a refresh counter and `digit_index` signal. |
 
 🔢 *Binary to BCD Conversion*
- This part converts the 16-bit signed filtered signal to an unsigned value and then into millivolts:
+
+This part converts the 16-bit signed filtered signal to an unsigned value and then into millivolts:
 ```vhdl
 abs_data <= unsigned(abs(signed(data_in)));
 voltage_mv <= to_integer(abs_data(15 downto 4)) * 1000 / 4095;
@@ -352,6 +353,60 @@ voltage_mv <= to_integer(abs_data(15 downto 4)) * 1000 / 4095;
 
 - The value is scaled from 0–4095 to 0–1000 mV
 
+🔍 *Digit Extraction*
+
+This breaks the millivolt value into four separate decimal digits for display:
+```vhdl
+val := voltage_mv;
+bcd_digits(0) <= (val / 1000) mod 10; -- thousands
+bcd_digits(1) <= (val / 100) mod 10;  -- hundreds
+bcd_digits(2) <= (val / 10) mod 10;   -- tens
+bcd_digits(3) <= val mod 10;          -- units
+```
+Each digit will be shown on one of the four 7-segment display digits.
+
+💡 *7-Segment Encoder*
+This selects the correct 7-segment pattern for the active digit:
+```vhdl
+case digit_val is
+  when 0 => seg_raw <= "0000001";
+  when 1 => seg_raw <= "1001111";
+  when 2 => seg_raw <= "0010010";
+  when 3 => seg_raw <= "0000110";
+  when 4 => seg_raw <= "1001100";
+  when 5 => seg_raw <= "0100100";
+  when 6 => seg_raw <= "0100000";
+  when 7 => seg_raw <= "0001111";
+  when 8 => seg_raw <= "0000000";
+  when 9 => seg_raw <= "0000100";
+  when others => seg_raw <= "1111111"; -- blank
+end case;
+
+```
+- `digit_val` selects which digit is currently being displayed.
+
+- `seg_raw` drives segments a–g (active low).
+
+  
+
+🔄 *Multiplexing Controller*
+
+This logic cycles through each of the 4 digits quickly (~1 kHz refresh rate):
+```vhdl
+refresh_cnt <= refresh_cnt + 1;
+if refresh_cnt = 25000 then
+  refresh_cnt <= 0;
+  digit_index <= (digit_index + 1) mod 4;
+end if;
+```
+Then selects the current active digit:
+```vhdl
+anodes <= (others => '1');           -- disable all digits
+anodes(digit_index) <= '0';         -- enable one digit (active low)
+```
+- Only one digit is enabled at a time.
+
+- Display appears stable due to persistence of vision.
 
  📊 **Internal Signals**
  
