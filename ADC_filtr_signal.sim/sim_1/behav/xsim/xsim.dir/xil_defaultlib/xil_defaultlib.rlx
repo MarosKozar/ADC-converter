@@ -1,0 +1,9 @@
+0.7
+2020.2
+Nov 18 2020
+09:47:47
+C:/Users/262069/ADC_filtr_dc/ADC_filtr.srcs/sim_1/new/sim_top.vhd,1746200302,vhdl,,,,sim_top,,,,,,,,
+C:/Users/262069/ADC_filtr_dc/ADC_filtr.srcs/sources_1/new/display_unit.vhd,1746201387,vhdl,,,,display_unit,,,,,,,,
+C:/Users/262069/ADC_filtr_dc/ADC_filtr.srcs/sources_1/new/fir_pkg.vhd,1746200947,vhdl,C:/Users/262069/ADC_filtr_dc/ADC_filtr.srcs/sim_1/new/sim_top.vhd;C:/Users/262069/ADC_filtr_dc/ADC_filtr.srcs/sources_1/new/processing_unit.vhd;C:/Users/262069/ADC_filtr_dc/ADC_filtr.srcs/sources_1/new/top_level.vhd,,,fir_pkg,,,,,,,,
+C:/Users/262069/ADC_filtr_dc/ADC_filtr.srcs/sources_1/new/processing_unit.vhd,1746200993,vhdl,,,,processing_unit,,,,,,,,
+C:/Users/262069/ADC_filtr_dc/ADC_filtr.srcs/sources_1/new/top_level.vhd,1746201526,vhdl,,,,top_level,,,,,,,,

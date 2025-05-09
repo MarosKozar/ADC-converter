@@ -1,0 +1,10 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../../ADC_filtr_dc/ADC_filtr.srcs/sources_1/new/display_unit.vhd" \
+"../../../../../ADC_filtr_dc/ADC_filtr.srcs/sources_1/new/fir_pkg.vhd" \
+"../../../../../ADC_filtr_dc/ADC_filtr.srcs/sources_1/new/processing_unit.vhd" \
+"../../../../../ADC_filtr_dc/ADC_filtr.srcs/sources_1/new/top_level.vhd" \
+"../../../../../ADC_filtr_dc/ADC_filtr.srcs/sim_1/new/sim_top.vhd" \
+
+# Do not sort compile order
+nosort
