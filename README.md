@@ -243,12 +243,10 @@ When combined with an anode, lighting specific segments shows numbers or letters
 
 💡 LED Outputs
 tcl
-Zkopírovat
-Upravit
 set_property -dict { PACKAGE_PIN H17 IOSTANDARD LVCMOS33 } [get_ports { leds[15] }]
 ...
 set_property -dict { PACKAGE_PIN V11 IOSTANDARD LVCMOS33 } [get_ports { leds[0] }]
-Maps 16 LEDs (from leds[0] to leds[15]) to FPGA pins.
+
 
 Allows your design to output binary patterns, status indicators, counters, etc.
 
