@@ -266,7 +266,7 @@ end if;
 
 - **Debounce threshold**: Ignores small fluctuations < 10mV (approx).
 - Prevents noise from updating the final output.
-- 
+  
 🔄 **Output Mapping:**
 ```vhdl
  filtered <= std_logic_vector(to_signed(prev_output, 16));
@@ -277,11 +277,11 @@ filtered_out <= filtered;
 
 - Why 16 bits?
 
- -- Keeps compatibility with display and system bus widths.
+ - Keeps compatibility with display and system bus widths.
  
- -- Ensures clean alignment with VHDL-wide standard integer types.
+ - Ensures clean alignment with VHDL-wide standard integer types.
  
- -- 12-bit ADC value fits safely into 16-bit signed format with room for potential scaling.
+ - 12-bit ADC value fits safely into 16-bit signed format with room for potential scaling.
 
 📘 **Summary of Why and How:**
 
