@@ -43,7 +43,9 @@ This FPGA project demonstrates how to digitize and filter an analog signal using
 
 ## 🔍 File-by-File Breakdown
 
-### `top_level.vhd`
+---
+
+### 1.`top_level.vhd`
  🧩 **Role: System Integrator**
  
  This file defines the **top-level VHDL entity** for the entire system. It glues together the major components:
@@ -139,7 +141,8 @@ disp : display_unit
 - Feeds filtered signal into display logic.
 - Drives visual hardware outputs.
 
-
+---
+### 1.`processing_unit`
 
 
 
