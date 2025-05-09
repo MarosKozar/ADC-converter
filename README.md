@@ -139,8 +139,6 @@ disp : display_unit
 - Feeds filtered signal into display logic.
 - Drives visual hardware outputs.
 
----
-
 ## 2.`processing_unit`
 
 
