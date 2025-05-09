@@ -51,7 +51,7 @@ This FPGA project demonstrates how to digitize and filter an analog signal using
  - `display_unit`: outputs the filtered result both digitally and visually
  
  
- 🔌 **Interfaces Entity: `top_level`**
+ 🧮 **Interfaces Entity: `top_level`**
   ```vhdl 
 entity top_level is
   port (
