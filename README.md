@@ -264,7 +264,7 @@ u_xadc : XADC
 
 
 
-## 5.`nexys_A7`
+## 5.`nexys_a7.xdc`
 
 🔍 **Overview**
 
@@ -296,6 +296,7 @@ create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports { c
 
 🧠 **Why it's needed:** Tells Vivado the timing characteristics of your clock source so it can perform proper static timing analysis.
 
+---
 ⚡️ **XADC Analog Inputs**
 
 ```vhdl
@@ -306,7 +307,8 @@ set_property -dict { PACKAGE_PIN A14 IOSTANDARD LVCMOS18 } [get_ports { vn_in }]
 
 - LVCMOS18 = 1.8V logic standard — required for analog input compatibility.
 
-🧠 Why it's needed: Enables use of onboard sensors or other analog input for digitization within the FPGA.
+🧠 **Why it's needed:** Enables use of onboard sensors or other analog input for digitization within the FPGA.
+
 ---
 🔁 **Reset Button**
 ```vhdl
@@ -315,7 +317,8 @@ set_property -dict { PACKAGE_PIN N17 IOSTANDARD LVCMOS33 } [get_ports { reset }]
 - Assigns the reset signal (e.g., for resetting a state machine) to pin N17.
 - Standard 3.3V logic.
 
-🧠 Why it's needed: Provides a way to reset your logic design externally via a button on the board.
+🧠 **Why it's needed:** Provides a way to reset your logic design externally via a button on the board.
+
 ---
 🔢 **7-Segment Display - Anodes**
 ```vhdl
@@ -356,6 +359,162 @@ set_property -dict { PACKAGE_PIN V11 IOSTANDARD LVCMOS33 } [get_ports { leds[0] 
 - Each LED typically turns on when driven high, depending on board design.
 
 ---
+
+## 6.`sim_top.vhd`
+
+🧠 **Purpose of the Testbench**
+
+This testbench simulates a design called top_level, which likely uses the Xilinx XADC to read analog signals, outputs to a 7-segment display, and drives LEDs. The testbench provides:
+- Clock and reset signals
+- Fake XADC behavior
+- A mechanism to drive simulated analog values (filtered_inject)
+---
+
+🧩 **Library Declarations**
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+```
+- Includes the standard logic types (like std_logic and std_logic_vector) and numeric operations (like to_unsigned) that are used in simulation and design.
+---
+
+📦 **Entity Declaration**
+```vhdl
+entity sim_top_tb is
+end sim_top_tb;
+```
+- This is a testbench entity named sim_top_tb. Since it's a testbench, it has no ports—it's a top-level wrapper used only for simulation.
+---
+
+🏗️ **Architecture Declaration**
+```vhdl
+architecture test of sim_top_tb is
+```
+- Starts the architecture body named test.
+---
+
+🔧 **Component Declaration**
+```vhdl
+component top_level
+  port (
+    clk     : in  std_logic;
+    reset   : in  std_logic;
+    vauxp3  : in  std_logic;
+    vauxn3  : in  std_logic;
+    seg_an  : out std_logic_vector(3 downto 0);
+    seg_cat : out std_logic_vector(6 downto 0);
+    leds    : out std_logic_vector(15 downto 0)
+  );
+end component;
+```
+- Declares the Unit Under Test (UUT): your top-level hardware design.
+- Matches the ports of your real top_level entity.
+- Note: This version uses vauxp3 and vauxn3 instead of vp_in and vn_in from earlier—likely for simulating XADC input.
+---
+
+📶 **Signal Declarations**
+```vhdl
+signal clk     : std_logic := '0';
+signal reset   : std_logic := '1';
+signal vauxp3  : std_logic := '0';
+signal vauxn3  : std_logic := '0';
+signal seg_an  : std_logic_vector(3 downto 0);
+signal seg_cat : std_logic_vector(6 downto 0);
+signal leds    : std_logic_vector(15 downto 0);
+```
+- Internal signals to connect to the DUT (Device Under Test).
+- Initializes clk to '0', reset to '1' (active), and others to '0'.
+
+```vhdl
+signal filtered_inject : std_logic_vector(15 downto 0) := (others => '0');
+```
+- Emulates a digital output from an ADC, possibly fed into top_level internally.
+- Filled with simulated values over time (see stimulus process).
+
+```vhdl
+signal adc_clock : integer := 0;
+```
+- This signal is declared but unused. Likely leftover or placeholder for future clocking.
+---
+
+🔗 **Component Instantiation**
+```vhdl
+dut: top_level
+  port map (
+    clk     => clk,
+    reset   => reset,
+    vauxp3  => vauxp3,
+    vauxn3  => vauxn3,
+    seg_an  => seg_an,
+    seg_cat => seg_cat,
+    leds    => leds
+  );
+```
+- Instantiates the top_level component.
+- Connects internal signals declared above to the DUT ports.
+---
+
+🕒 **Clock Generator Process**
+```vhdl
+clk_proc: process
+begin
+  while true loop
+    clk <= '1';
+    wait for 5 ns;
+    clk <= '0';
+    wait for 5 ns;
+  end loop;
+end process;
+```
+- Creates a 100 MHz clock by toggling clk every 5 ns (period = 10 ns).
+- Loops forever during simulation.
+---
+
+🔁 **Reset Process**
+```vhdl
+process
+begin
+  wait for 100 ns;
+  reset <= '0';
+end process;
+```
+- Asserts reset (reset = '1') at simulation start.
+- Deasserts reset after 100 ns (reset = '0') to begin normal operation.
+---
+
+📈 **Stimulus Process (ADC Input Emulation)**
+```vhdl
+stimulus_proc: process
+begin
+  wait for 200 ns;
+
+  -- Simulate rising filtered value
+  for i in 0 to 4095 loop
+    filtered_inject <= std_logic_vector(to_unsigned(i * 16, 16));
+    wait for 100 ns;
+  end loop;
+
+  wait;
+end process;
+```
+- Starts after 200 ns.
+- Emulates an increasing analog voltage by incrementing a 12-bit value (scaled by 16 = left-shifted 4 bits) into a 16-bit signal.
+- Each step waits 100 ns.
+- Mimics rising voltage as if from a potentiometer or sensor.
+---
+
+🧪 **XADC Emulation**
+```vhdl
+vauxp3 <= '1' when filtered_inject > x"0100" else '0';
+vauxn3 <= '0';
+```
+- Patches XADC input values:
+  - Sets vauxp3 high if filtered_inject exceeds 0x0100 (256 in decimal).
+  - Keeps vauxn3 low (representing ground).
+- These signals mimic analog voltage behavior for simulation purposes.
+---
+
 
 
 
