@@ -616,6 +616,76 @@ vauxn3 <= '0';
 - These signals mimic analog voltage behavior for simulation purposes.
 ---
 
+**SIMULATION**
+-
+![Simulation](https://raw.githubusercontent.com/MarosKozar/ADC-converter/main/simulation.png)
+
+- These are the signals being monitored:
+- `analog_signal[11:0]`
+– This is the input to the ADC, likely a 12-bit analog signal sampled digitally (values range from 000 to FFF in hex = 0 to 4095 in decimal).
+– These values increase over time (e.g., 3FF, 7FF, BFF, FFF).
+
+- `leds[15:0]`
+– Likely a visual representation of the ADC output, perhaps showing a bargraph-style voltage level on 16 LEDs.
+– Follows the pattern of the analog signal (e.g., 03FF, 07FF, etc.), possibly padded or scaled.
+
+- `seg_hex_0[6:0` to `seg_hex_3[6:0]`
+– These are 7-segment display encodings, typically using active-low segments (meaning 0 lights up a segment).
+– Each represents one digit on a 4-digit 7-segment display.
+– The values (3F, 71, 4F, etc.) correspond to hexadecimal encodings for digits 0-9 and A-F.
+- Input: A 12-bit analog signal is digitized.
+
+- **Output:** The digitized value is:
+
+- Displayed on LEDs in 16-bit format.
+
+- Converted into 4-digit hexadecimal form and shown on four 7-segment displays.
+
+- Time Behavior: Signal changes are shown over 2 µs as ADC input increases.
+
+
+**HARDWARE**
+-
+![Hardware](https://raw.githubusercontent.com/MarosKozar/ADC-converter/main/hardware.png)
+
+# ADC Converter Project
+
+This project demonstrates a basic **Analog-to-Digital Converter (ADC)** system using the **Nexys A7 FPGA development board**, a **DC voltage source**, and a **breadboard** setup. The system reads an analog voltage, converts it to a digital signal, and processes it using FPGA logic.
+
+---
+
+## 🔧 Components Used
+
+### ⚡ Breadboard DC Source
+A simple adjustable DC voltage source (typically 0–5V) is used to generate the analog input signal. This allows for testing the ADC system under various input conditions.
+
+### 🔌 Breadboard
+Used for prototyping and organizing the circuit. It allows easy connections between the DC source, signal conditioning (if any), and the Nexys A7 board.
+
+### 🧠 Nexys A7 Board (Xilinx Artix-7 FPGA)
+Acts as the digital processing unit. It:
+- Interfaces with the analog signal (directly or via external ADC module).
+- Converts the signal using either onboard or external ADC.
+- Processes or displays the digital output.
+
+Programming is typically done in **Verilog**, **VHDL**, or using a soft-core processor like **MicroBlaze**.
+
+### 🧵 Jumper Wires
+Used for making all necessary connections between the components (DC source ↔ breadboard ↔ FPGA board).
+
+ **ADC CONVERSION WITH FILTRATION**
+ -
+ ![ADC Graph](https://raw.githubusercontent.com/MarosKozar/ADC-converter/main/adc%20graph%201.png)
+
+- Lines on the Graph:
+
+- Orange Line (Noisy Analog Signal Before Filtration): This line represents the raw, noisy analog signal before any processing or filtration. You can observe fluctuations or noise in the signal.
+
+- Green Line (Filtered Analog Signal Before ADC): This line shows the analog signal after being filtered. The noise is reduced, and the signal becomes smoother.
+
+- Red Line (12-bit ADC Output as Voltage): This line shows the output of the 12-bit ADC conversion. It represents how the filtered analog signal is quantized into discrete digital values (at 12-bit resolution), with some loss of accuracy due to the conversion.
+
+- Purple Line (16-bit Representation as Voltage): This line represents the same signal but with a higher resolution (16-bit ADC), showing a more accurate digitization of the signal.
 
 
 
