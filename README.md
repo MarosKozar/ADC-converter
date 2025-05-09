@@ -366,6 +366,7 @@ bcd_digits(3) <= val mod 10;          -- units
 Each digit will be shown on one of the four 7-segment display digits.
 
 💡 *7-Segment Encoder*
+
 This selects the correct 7-segment pattern for the active digit:
 ```vhdl
 case digit_val is
