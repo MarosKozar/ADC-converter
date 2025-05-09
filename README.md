@@ -333,18 +333,9 @@ It takes a **16-bit filtered signal** `from processing_unit`, interprets it as a
  
  🔧 **Core Logic Overview**
  
-   Aspect | Reason / Role | code | How Works? |
- |-------|-----------|-------|-----------
- | **Binary to BCD Conversion** | 	The signed 16-bit input is converted to an absolute unsigned value for voltage display. | 
- ```vhdl
-abs_data <= unsigned(abs(signed(data_in)));
-voltage_mv <= to_integer(abs_data(15 downto 4)) * 1000 / 4095;
-```
-| - data_in is signed → converted to unsigned absolute value
-
-- Only the top 12 bits are used (hence 15 downto 4)
-
-- The value is scaled from 0–4095 to 0–1000 mV|
+   Aspect | Reason / Role |
+ |-------|-----------|
+ | **Binary to BCD Conversion** | 	The signed 16-bit input is converted to an absolute unsigned value for voltage display.|
  | **Digit Extraction** | Extracts individual decimal digits (thousands to units) from the ADC value. |
  | **7-Segment Encoder** |	Converts a digit (0–9) to the corresponding 7-segment encoding. |
  | **Multiplexing Controller** |	Rapidly switches between 4 digits using a refresh counter and `digit_index` signal. |
