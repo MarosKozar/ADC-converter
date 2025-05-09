@@ -18,20 +18,14 @@ This FPGA project demonstrates how to digitize and filter an analog signal using
 ## 🧠 Architecture Overview
  Stage | Component | Description | Output |
 |-------|-----------|-------------|--------|
-| 1 | **DC Source** | External analog voltage source or function generator connected to analog pins | Analog voltage
-signal |
+| 1 | **DC Source** | External analog voltage source or function generator connected to analog pins | Analog voltage signal |
 | 2 | **Nexys A7 Board** | FPGA board that hosts the digital signal processing system | Internal signal flow |
-| 3 | **XADC** (`processing_unit.vhd`) | Xilinx Analog to Digital Converter: Converts analog voltage into 12-bit digital
-value | Digital 12-bit raw ADC sample |
-| 4 | **IIR Filter** (`processing_unit.vhd`) | Applies low-pass filter using exponential smoothing to reduce noise |
-Smoothed digital signal |
-| 5 | **Threshold Logic** (`processing_unit.vhd`) | Ignores minor changes under 10mV to suppress flicker and noise |
-Stable filtered signal |
+| 3 | **XADC** (`processing_unit.vhd`) | Xilinx Analog to Digital Converter: Converts analog voltage into 12-bit digital value | Digital 12-bit raw ADC sample |
+| 4 | **IIR Filter** (`processing_unit.vhd`) | Applies low-pass filter using exponential smoothing to reduce noise | Smoothed digital signal |
+| 5 | **Threshold Logic** (`processing_unit.vhd`) | Ignores minor changes under 10mV to suppress flicker and noise | Stable filtered signal |
 | 6 | **Voltage Scaling** (`display_unit.vhd`) | Converts filtered 12-bit value to millivolts | Integer voltage in mV |
-| 7 | **BCD Converter + 7-Segment Driver** (`display_unit.vhd`) | Converts mV into 4-digit BCD and multiplexes to
-7-segment display | Real-time visual output on display |
-| 8 | **LED Display** (`display_unit.vhd`) | Mirrors the 16-bit filtered signal on the onboard LEDs | Binary indicator of
-signal level |
+| 7 | **BCD Converter + 7-Segment Driver** (`display_unit.vhd`) | Converts mV into 4-digit BCD and multiplexes to 7-segment display | Real-time visual output on display |
+| 8 | **LED Display** (`display_unit.vhd`) | Mirrors the 16-bit filtered signal on the onboard LEDs | Binary indicator of signal level |
 ---
 
 ## 📂 File Structure
