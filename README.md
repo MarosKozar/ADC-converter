@@ -189,8 +189,10 @@ Waveform {0 5} = 50% duty cycle (clock high for 5ns, low for 5ns).
 tcl
 Zkopírovat
 Upravit
+```
 set_property -dict { PACKAGE_PIN A13 IOSTANDARD LVCMOS18 } [get_ports { vp_in }]
 set_property -dict { PACKAGE_PIN A14 IOSTANDARD LVCMOS18 } [get_ports { vn_in }]
+```
 These two lines assign vp_in and vn_in ports to A13 and A14, which are dedicated analog input pins for the Xilinx XADC (Analog-to-Digital Converter).
 
 LVCMOS18 = 1.8V logic standard — required for analog input compatibility.
@@ -198,10 +200,12 @@ LVCMOS18 = 1.8V logic standard — required for analog input compatibility.
 🧠 Why it's needed: Enables use of onboard sensors or other analog input for digitization within the FPGA.
 
 🔁 Reset Button
+```
 tcl
 Zkopírovat
 Upravit
 set_property -dict { PACKAGE_PIN N17 IOSTANDARD LVCMOS33 } [get_ports { reset }]
+```
 Assigns the reset signal (e.g., for resetting a state machine) to pin N17.
 
 Standard 3.3V logic.
@@ -209,6 +213,7 @@ Standard 3.3V logic.
 🧠 Why it's needed: Provides a way to reset your logic design externally via a button on the board.
 
 🔢 7-Segment Display - Anodes
+```
 tcl
 Zkopírovat
 Upravit
@@ -221,13 +226,15 @@ Assigns the control lines for each digit of a 4-digit 7-segment display.
 seg_an[0] through seg_an[3] enable each of the 4 digits.
 
 Active-low typically: driving low enables that digit.
+```
 
 🧠 Why it's needed: Allows time-multiplexed control of each 7-segment digit.
 
 🔠 7-Segment Display - Cathodes
+```
 tcl
 Zkopírovat
-```Upravit
+Upravit
 set_property -dict { PACKAGE_PIN T10 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[0] }]
 set_property -dict { PACKAGE_PIN R10 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[1] }]
 set_property -dict { PACKAGE_PIN K16 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[2] }]
@@ -235,6 +242,7 @@ set_property -dict { PACKAGE_PIN K13 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[
 set_property -dict { PACKAGE_PIN P15 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[4] }]
 set_property -dict { PACKAGE_PIN T11 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[5] }]
 set_property -dict { PACKAGE_PIN L18 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[6] }]
+```
 These control the individual segments a–g (no decimal point here).
 
 When combined with an anode, lighting specific segments shows numbers or letters.
@@ -242,11 +250,12 @@ When combined with an anode, lighting specific segments shows numbers or letters
 🧠 Why it's needed: To draw characters on the 7-segment display, your logic activates the correct segments and anodes.
 
 💡 LED Outputs
+```
 tcl
 set_property -dict { PACKAGE_PIN H17 IOSTANDARD LVCMOS33 } [get_ports { leds[15] }]
 ...
 set_property -dict { PACKAGE_PIN V11 IOSTANDARD LVCMOS33 } [get_ports { leds[0] }]
-
+```
 
 Allows your design to output binary patterns, status indicators, counters, etc.
 
