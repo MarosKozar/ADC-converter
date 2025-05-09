@@ -284,7 +284,7 @@ Most likely, this is for a board like the Basys 3 or Nexys A7, which includes:
 - A reset button
 
 🕒 **Clock and Timing**
-```
+```vhdl
 set_property -dict { PACKAGE_PIN E3 IOSTANDARD LVCMOS33 } [get_ports { clk }]
 create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports { clk }]
 ```
@@ -298,7 +298,7 @@ create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports { c
 
 ⚡️ **XADC Analog Inputs**
 
-```
+```vhdl
 set_property -dict { PACKAGE_PIN A13 IOSTANDARD LVCMOS18 } [get_ports { vp_in }]
 set_property -dict { PACKAGE_PIN A14 IOSTANDARD LVCMOS18 } [get_ports { vn_in }]
 ```
@@ -309,7 +309,7 @@ set_property -dict { PACKAGE_PIN A14 IOSTANDARD LVCMOS18 } [get_ports { vn_in }]
 🧠 Why it's needed: Enables use of onboard sensors or other analog input for digitization within the FPGA.
 ---
 🔁 **Reset Button**
-```
+```vhdl
 set_property -dict { PACKAGE_PIN N17 IOSTANDARD LVCMOS33 } [get_ports { reset }]
 ```
 - Assigns the reset signal (e.g., for resetting a state machine) to pin N17.
@@ -318,12 +318,12 @@ set_property -dict { PACKAGE_PIN N17 IOSTANDARD LVCMOS33 } [get_ports { reset }]
 🧠 Why it's needed: Provides a way to reset your logic design externally via a button on the board.
 ---
 🔢 **7-Segment Display - Anodes**
-```
+```vhdl
 set_property -dict { PACKAGE_PIN J17 IOSTANDARD LVCMOS33 } [get_ports { seg_an[0] }]
 set_property -dict { PACKAGE_PIN J18 IOSTANDARD LVCMOS33 } [get_ports { seg_an[1] }]
 set_property -dict { PACKAGE_PIN T9  IOSTANDARD LVCMOS33 } [get_ports { seg_an[2] }]
 set_property -dict { PACKAGE_PIN J14 IOSTANDARD LVCMOS33 } [get_ports { seg_an[3] }]
-
+```
 - Assigns the control lines for each digit of a 4-digit 7-segment display.
 - seg_an[0] through seg_an[3] enable each of the 4 digits.
 - Active-low typically: driving low enables that digit.
@@ -331,7 +331,7 @@ set_property -dict { PACKAGE_PIN J14 IOSTANDARD LVCMOS33 } [get_ports { seg_an[3
 🧠 **Why it's needed:** Allows time-multiplexed control of each 7-segment digit.
 ---
 🔠 **7-Segment Display - Cathodes**
-```
+```vhdl
 set_property -dict { PACKAGE_PIN T10 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[0] }]
 set_property -dict { PACKAGE_PIN R10 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[1] }]
 set_property -dict { PACKAGE_PIN K16 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[2] }]
@@ -346,7 +346,7 @@ set_property -dict { PACKAGE_PIN L18 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[
 🧠 **Why it's needed:** To draw characters on the 7-segment display, your logic activates the correct segments and anodes.
 ---
 💡 **LED Outputs**
-```
+```vhdl
 set_property -dict { PACKAGE_PIN H17 IOSTANDARD LVCMOS33 } [get_ports { leds[15] }]
 ...
 set_property -dict { PACKAGE_PIN V11 IOSTANDARD LVCMOS33 } [get_ports { leds[0] }]
