@@ -347,12 +347,14 @@ signal anodes      : std_logic_vector(3 downto 0); -- Controls active digit
 ```
 
 📘 **Behavior Summary**
- 
- - Mirrors data_in to leds.
- - Converts signed input to absolute decimal value (abs_data).
- - Periodically updates which digit is displayed using a refresh counter.
- - Encodes the current digit value to 7-segment format.
- - Activates one digit at a time using anode control (seg_an).
+
+  - Mirrors data_in to leds.
+  - Converts signed input to absolute decimal value (abs_data).
+  - Periodically updates which digit is displayed using a refresh counter.
+  -  Encodes the current digit value to 7-segment format.
+  -  Activates one digit at a time using anode control (seg_an).
+
+
 
  
 ## 5.`nexys_a7.xdc`
