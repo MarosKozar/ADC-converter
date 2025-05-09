@@ -293,9 +293,11 @@ filtered_out <= filtered;
 
 ## 3.`display_unit.vhd`
 
-🧩 **Role: Visual Output Driver**
- 
-   This file defines the **display_unit**, which is responsible for presenting the 16-bit filtered ADC data on LEDs and a 4-digit 7-segment display. It performs data conversion and digit multiplexing for visual clarity.
+
+ 🧩 **Role: Visual Output Driver**
+ 
+ This file defines the **display_unit**, which is responsible for presenting the 16-bit filtered ADC data on LEDs and a 4-digit 7-segment display. It performs data conversion and digit multiplexing for visual clarity.
+
    
  🧮 **Interfaces Entity:  `display_unit`**
 
