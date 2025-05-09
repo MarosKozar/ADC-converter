@@ -299,7 +299,7 @@ filtered_out <= filtered;
  This file defines the **display_unit**, which is responsible for presenting the 16-bit filtered ADC data on LEDs and a 4-digit 7-segment display. It performs data conversion and digit multiplexing for visual clarity.
 
    
- 🧮 **Interfaces Entity:  `display_unit`**
+🧮 **Interfaces Entity:  `display_unit`**
 
  ```vhdl
    entity display_unit is
