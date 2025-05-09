@@ -332,6 +332,7 @@ set_property -dict { PACKAGE_PIN J14 IOSTANDARD LVCMOS33 } [get_ports { seg_an[3
 - Active-low typically: driving low enables that digit.
 
 🧠 **Why it's needed:** Allows time-multiplexed control of each 7-segment digit.
+
 ---
 🔠 **7-Segment Display - Cathodes**
 ```vhdl
@@ -347,6 +348,7 @@ set_property -dict { PACKAGE_PIN L18 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[
 - When combined with an anode, lighting specific segments shows numbers or letters.
 
 🧠 **Why it's needed:** To draw characters on the 7-segment display, your logic activates the correct segments and anodes.
+
 ---
 💡 **LED Outputs**
 ```vhdl
