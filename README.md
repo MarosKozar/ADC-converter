@@ -17,3 +17,25 @@ This FPGA project demonstrates how to digitize and filter an analog signal using
 
 ## 🧠 Architecture Overview
 
+---
+
+## 📂 File Structure
+
+| File | Role |
+|------|------|
+| `top_level.vhd` | Connects all components |
+| `processing_unit.vhd` | Handles XADC + filtering |
+| `display_unit.vhd` | Converts value to voltage, updates 7-seg/LEDs |
+| `fir_pkg.vhd` | Type definitions for filter dev(No longer used in project, not connected to any file) |
+| `nexys_a7.xdc` | FPGA pin constraints |
+| `sim_top.vhd` | Testbench for simulation |
+
+---
+
+## 🔧 XADC Configuration
+
+Xilinx’s internal XADC reads analog voltage from dedicated pins.
+
+```vhdl
+DO      → 12-bit ADC data (MSBs)
+DRDY    → Indicates ready state
