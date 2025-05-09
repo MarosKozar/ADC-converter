@@ -314,7 +314,6 @@ filtered_out <= filtered;
   );
 end entity;
 ```
-```
 
 **Inputs**:
 ```vhd
