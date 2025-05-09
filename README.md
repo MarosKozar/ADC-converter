@@ -103,7 +103,7 @@ end component;
 ```
 - Converts 16-bit input data to visual output (7-segment + LEDs).
 
- 🔧  **Internal Signal: `processing_unit` and `display_unit`**
+ 🔧  **Internal Signal:**
  The top-level logic instantiates both components and connects them through internal signals:
 
  ```vhdl
@@ -295,7 +295,13 @@ filtered_out <= filtered;
 
  🧠 **Role: Visual Output Driver**
  
- This file defines the **display_unit**, which is responsible for presenting the 16-bit filtered ADC data on LEDs and a 4-digit 7-segment display. It performs data conversion and digit multiplexing for visual clarity.
+It takes a **16-bit filtered signal** `from processing_unit`, interprets it as a voltage in millivolts, splits the value into decimal digits, and drives a **multiplexed 7-segment display**. It also mirrors the raw signal to the 16 LEDs for debugging or direct monitoring.
+
+ -Accepts a 16-bit digital signal (data_in)
+ -Converts it into millivolts
+ -Breaks it into individual decimal digits (BCD)
+ -Displays it on a 4-digit 7-segment display
+ -Mirrors the raw signal value on LEDs 
 
  🧩 **Interfaces Entity:  `display_unit`**   
 
@@ -316,7 +322,7 @@ filtered_out <= filtered;
 
   - `clk`: System clock
   - `reset`: Synchronous reset
-  - `data_in`: 16-bit input data from `processing_unit`
+  - `data_in`: 16-bit filtered input data from `processing_unit`
 
 
  **Outputs**:
@@ -327,9 +333,18 @@ filtered_out <= filtered;
  
  🔧 **Core Logic Overview**
  
-   Aspect | Reason / Role | 
- |-------|-----------|
- | **Binary to BCD Conversion** | 	The signed 16-bit input is converted to an absolute unsigned value for display. |
+   Aspect | Reason / Role | code | How Works? |
+ |-------|-----------|-------|-----------
+ | **Binary to BCD Conversion** | 	The signed 16-bit input is converted to an absolute unsigned value for voltage display. | 
+ ```vhdl
+abs_data <= unsigned(abs(signed(data_in)));
+voltage_mv <= to_integer(abs_data(15 downto 4)) * 1000 / 4095;
+```
+| - data_in is signed → converted to unsigned absolute value
+
+- Only the top 12 bits are used (hence 15 downto 4)
+
+- The value is scaled from 0–4095 to 0–1000 mV|
  | **Digit Extraction** | Extracts individual decimal digits (thousands to units) from the ADC value. |
  | **7-Segment Encoder** |	Converts a digit (0–9) to the corresponding 7-segment encoding. |
  | **Multiplexing Controller** |	Rapidly switches between 4 digits using a refresh counter and `digit_index` signal. |
@@ -610,31 +625,6 @@ vauxn3 <= '0';
 - These signals mimic analog voltage behavior for simulation purposes.
 ---
 
-**SIMULATION**
-![Simulation](https://raw.githubusercontent.com/MarosKozar/ADC-converter/main/simulation.png)
-
-- These are the signals being monitored:
-- `analog_signal[11:0]`
-– This is the input to the ADC, likely a 12-bit analog signal sampled digitally (values range from 000 to FFF in hex = 0 to 4095 in decimal).
-– These values increase over time (e.g., 3FF, 7FF, BFF, FFF).
-
-- `leds[15:0]`
-– Likely a visual representation of the ADC output, perhaps showing a bargraph-style voltage level on 16 LEDs.
-– Follows the pattern of the analog signal (e.g., 03FF, 07FF, etc.), possibly padded or scaled.
-
-- `seg_hex_0[6:0` to `seg_hex_3[6:0]`
-– These are 7-segment display encodings, typically using active-low segments (meaning 0 lights up a segment).
-– Each represents one digit on a 4-digit 7-segment display.
-– The values (3F, 71, 4F, etc.) correspond to hexadecimal encodings for digits 0-9 and A-F.
-- Input: A 12-bit analog signal is digitized.
-
-- **Output:** The digitized value is:
-
-- Displayed on LEDs in 16-bit format.
-
-- Converted into 4-digit hexadecimal form and shown on four 7-segment displays.
-
-- Time Behavior: Signal changes are shown over 2 µs as ADC input increases.
 
 
 
