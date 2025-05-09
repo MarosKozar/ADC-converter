@@ -44,73 +44,59 @@ This FPGA project demonstrates how to digitize and filter an analog signal using
 ## 🔍 File-by-File Breakdown
 
 ### `top_level.vhd`
-🧩 **Role: System Integrator**
+ 🧩 **Role: System Integrator**
+ 
+ This file defines the **top-level VHDL entity** for the entire system. It glues together the major components:
+ - `processing_unit`: captures and filters the analog signal
+ - `display_unit`: outputs the filtered result both digitally and visually
+ 
+ ---
+ 
+ 🔌 **Interfaces**
+ 
+ **Inputs**:
+ - `clk`: Main system clock  
+ - `reset`: Global synchronous reset  
+ - `vp_in`, `vn_in`: Differential analog voltage inputs for XADC  
+ 
+ **Outputs**:
+ - `leds`: 16-bit binary display of the filtered signal  
+ - `seg_cat`, `seg_an`: 7-segment cathode/anode display drivers  
+ 
+ ---
+ 
+  🧱 **Component Instantiations**
+ ```vhdl
+ component processing_unit
+   port (
+     clk          : in  std_logic;
+     reset        : in  std_logic;
+     vp_in        : in  std_logic;
+     vn_in        : in  std_logic;
+     filtered_out : out std_logic_vector(15 downto 0)
+   );
+ end component;
+ 
+ component display_unit
+   port (
+     clk       : in  std_logic;
+     reset     : in  std_logic;
+     data_in   : in  std_logic_vector(15 downto 0);
+     seg_cat   : out std_logic_vector(6 downto 0);
+     seg_an    : out std_logic_vector(3 downto 0);
+     leds      : out std_logic_vector(15 downto 0)
+   );
+ end component;
+```
+ 🔗 **Signal Routing**
+ The top-level logic instantiates both components and connects them through internal signals:
+ 
+ vhdl
 
-This file defines the **top-level VHDL entity** for the entire system. It glues together the major components:
-- `processing_unit`: captures and filters the analog signal
-- `display_unit`: outputs the filtered result both digitally and visually
+ ```vhdl
+ signal filtered : std_logic_vector(15 downto 0);
+ Used to route the result of processing_unit to display_unit.
+  ```
 
----
 
-#### 🔌 Interfaces
-
-**Inputs**:
-- `clk`: Main system clock  
-- `reset`: Global synchronous reset  
-- `vp_in`, `vn_in`: Differential analog voltage inputs for XADC  
-
-**Outputs**:
-- `leds`: 16-bit binary display of the filtered signal  
-- `seg_cat`, `seg_an`: 7-segment cathode/anode display drivers  
-
----
-
-#### 🧱 Component Instantiations
-```vhdl
-component processing_unit
-  port (
-    clk          : in  std_logic;
-    reset        : in  std_logic;
-    vp_in        : in  std_logic;
-    vn_in        : in  std_logic;
-    filtered_out : out std_logic_vector(15 downto 0)
-  );
-end component;
-
-component display_unit
-  port (
-    clk       : in  std_logic;
-    reset     : in  std_logic;
-    data_in   : in  std_logic_vector(15 downto 0);
-    seg_cat   : out std_logic_vector(6 downto 0);
-    seg_an    : out std_logic_vector(3 downto 0);
-    leds      : out std_logic_vector(15 downto 0)
-  );
-end component;
-🔗 Signal Routing
-The top-level logic instantiates both components and connects them through internal signals:
-
-vhdl
-Копировать
-Редактировать
-signal filtered : std_logic_vector(15 downto 0);
-Used to route the result of processing_unit to display_unit.
-
-🧠 Summary
-Modular design for easy integration and reusability
-
-All real-time data flow occurs through filtered signal
-
-Decouples signal processing from display logic
-
-sql
-Копировать
-Редактировать
-
-Would you like to insert this into the document or use it in a bundled GitHub export?
-
-### Hotkeys:
-- W ✅ Insert into README file
-- Z 📦 GitHub-ready export
-- N 🌐 Deploy as webpage
-- PDF 📄 Export final README with all sections
+ 
