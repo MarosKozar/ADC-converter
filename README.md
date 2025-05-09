@@ -246,15 +246,6 @@ Allows your design to output binary patterns, status indicators, counters, etc.
 
 Each LED typically turns on when driven high, depending on board design.
 
-🧠 Why it's needed: Useful for debugging, visualizing signals, and interactive control.
-
-✅ Summary
-Feature	Purpose	Pins Used
-Clock	100 MHz system clock input	E3
-Reset	Reset signal from a push-button	N17
-XADC Inputs	Analog input signals for XADC	A13 (vp), A14 (vn)
-7-Segment Display	Digit & segment control	J17, J18, T9, J14, etc.
-LEDs (16)	Visual output	H17 to V11
 
 
 
