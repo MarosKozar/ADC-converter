@@ -314,14 +314,14 @@ filtered_out <= filtered;
 
 **Inputs:**
 
-   - `clk`: System clock
-   - `reset`: Synchronous reset
-   - `data_in`: 16-bit input data from `processing_unit`
+  - `clk`: System clock
+  - `reset`: Synchronous reset
+  - `data_in`: 16-bit input data from `processing_unit`
+
 
  **Outputs**:
- 
-  - `leds`: Displays the full binary value for debugging or full-scale display
-  - `seg_cat`, `seg_an`: Drives a 4-digit 7-segment display using multiplexing
+  - `leds`: Displays the full binary value for debugging or full-scale display
+  - `seg_cat`, `seg_an`: Drives a 4-digit 7-segment display using multiplexing
 
 
  
