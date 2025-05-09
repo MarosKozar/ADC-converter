@@ -610,6 +610,31 @@ vauxn3 <= '0';
 - These signals mimic analog voltage behavior for simulation purposes.
 ---
 
+**SIMULATION**
+![Simulation](https://raw.githubusercontent.com/MarosKozar/ADC-converter/main/simulation.png)
+
+- These are the signals being monitored:
+- `analog_signal[11:0]`
+– This is the input to the ADC, likely a 12-bit analog signal sampled digitally (values range from 000 to FFF in hex = 0 to 4095 in decimal).
+– These values increase over time (e.g., 3FF, 7FF, BFF, FFF).
+
+- `leds[15:0]`
+– Likely a visual representation of the ADC output, perhaps showing a bargraph-style voltage level on 16 LEDs.
+– Follows the pattern of the analog signal (e.g., 03FF, 07FF, etc.), possibly padded or scaled.
+
+- `seg_hex_0[6:0` to `seg_hex_3[6:0]`
+– These are 7-segment display encodings, typically using active-low segments (meaning 0 lights up a segment).
+– Each represents one digit on a 4-digit 7-segment display.
+– The values (3F, 71, 4F, etc.) correspond to hexadecimal encodings for digits 0-9 and A-F.
+- Input: A 12-bit analog signal is digitized.
+
+- **Output:** The digitized value is:
+
+- Displayed on LEDs in 16-bit format.
+
+- Converted into 4-digit hexadecimal form and shown on four 7-segment displays.
+
+- Time Behavior: Signal changes are shown over 2 µs as ADC input increases.
 
 
 
