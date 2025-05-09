@@ -294,11 +294,11 @@ filtered_out <= filtered;
 ## 3.`display_unit.vhd`
 
 
- 🧩 **Role: Visual Output Driver**
+ 🧠 **Role: Visual Output Driver**
  
  This file defines the **display_unit**, which is responsible for presenting the 16-bit filtered ADC data on LEDs and a 4-digit 7-segment display. It performs data conversion and digit multiplexing for visual clarity.
 
- 🧮 **Interfaces Entity:  `display_unit`**   
+ 🧩 **Interfaces Entity:  `display_unit`**   
 
  ```vhdl
    entity display_unit is
@@ -314,20 +314,15 @@ filtered_out <= filtered;
 
 
 **Inputs:**
-
-```vhdl
   - `clk`: System clock
   - `reset`: Synchronous reset
   - `data_in`: 16-bit input data from `processing_unit`
-```
 
  **Outputs**:
- ```vhdl
-
  - `leds`: Displays the full binary value for debugging or full-scale display
  - `seg_cat`, `seg_an`: Drives a 4-digit 7-segment display using multiplexing
 
- ```
+
  
  🔧 **Core Logic Overview**
  
@@ -347,13 +342,15 @@ signal seg_raw     : std_logic_vector(6 downto 0); -- 7-segment output per di
 signal anodes      : std_logic_vector(3 downto 0); -- Controls active digit
 ```
 
-🧠 Behavior Summary
+📘 **Behavior Summary**
  
  - Mirrors data_in to leds.
  - Converts signed input to absolute decimal value (abs_data).
  - Periodically updates which digit is displayed using a refresh counter.
  - Encodes the current digit value to 7-segment format.
  - Activates one digit at a time using anode control (seg_an).
+
+ 
 ## 5.`nexys_a7.xdc`
 
 🔍 **Overview**
