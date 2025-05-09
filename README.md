@@ -276,11 +276,8 @@ filtered_out <= filtered;
 - Converts final filtered integer into a 16-bit signed vector.
 
 - Why 16 bits?
-
- - Keeps compatibility with display and system bus widths.
- 
- - Ensures clean alignment with VHDL-wide standard integer types.
- 
+ - Keeps compatibility with display and system bus widths. 
+ - Ensures clean alignment with VHDL-wide standard integer types. 
  - 12-bit ADC value fits safely into 16-bit signed format with room for potential scaling.
 
 📘 **Summary of Why and How:**
@@ -295,38 +292,41 @@ filtered_out <= filtered;
 
 
 ## 3. `display_unit.vhd`
-🧩 **Role: Visual Output Driver
+🧩 **Role:** Visual Output Driver
  
  This file defines the **display_unit**, which is responsible for presenting the 16-bit filtered ADC data on LEDs and a 4-digit 7-segment display. It performs data conversion and digit multiplexing for visual clarity.
  
  
  🧮 **Interfaces Entity:  `display_unit`**
-  ```vhdl
-  
-  entity display_unit is
-  port (
-    clk       : in  std_logic;
-    reset     : in  std_logic;
-    data_in   : in  std_logic_vector(15 downto 0);
-    seg_cat   : out std_logic_vector(6 downto 0);
-    seg_an    : out std_logic_vector(3 downto 0);
-    leds      : out std_logic_vector(15 downto 0)
-  );
-end entity;
+
+ ```vhdl
+   entity display_unit is
+   port (
+     clk       : in  std_logic;
+     reset     : in  std_logic;
+     data_in   : in  std_logic_vector(15 downto 0);
+     seg_cat   : out std_logic_vector(6 downto 0);
+     seg_an    : out std_logic_vector(3 downto 0);
+     leds      : out std_logic_vector(15 downto 0)
+   );
 ```
 
-**Inputs**:
-```vhd
- - `clk`: System clock
- - `reset`: Synchronous reset
- - `data_in`: 16-bit input data from `processing_unit`
+
+**Inputs:**
+
+```vhdl
+  - `clk`: System clock
+  - `reset`: Synchronous reset
+  - `data_in`: 16-bit input data from `processing_unit`
 ```
 
  **Outputs**:
- ```vhd
+ ```vhdl
+
  - `leds`: Displays the full binary value for debugging or full-scale display
  - `seg_cat`, `seg_an`: Drives a 4-digit 7-segment display using multiplexing
-```
+
+ ```
  
  🔧 **Core Logic Overview**
  
@@ -338,12 +338,13 @@ end entity;
  
  📊 **Internal Signals**
  
- ```
+```vhdl
 signal abs_data    : unsigned(15 downto 0);      -- Absolute value of signed input
 signal bcd_digits  : array (0 to 3) of integer;  -- Stores 4 decimal digits
 signal digit_index : integer range 0 to 3;       -- Tracks which digit is currently active
 signal seg_raw     : std_logic_vector(6 downto 0); -- 7-segment output per digit
-signal anodes      : std_logic_vector(3 downto 0); -- Controls active digit```
+signal anodes      : std_logic_vector(3 downto 0); -- Controls active digit
+```
 
 🧠 Behavior Summary
  
