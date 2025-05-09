@@ -197,11 +197,11 @@ component XADC
 end component;
 
 ```
--**VP/VN**: Analog differential inputs.
--**DO[15:0]**: 16-bit output where only the upper 12 bits represent actual data (XADC is 12-bit).
--**DRDY**: Asserted when new data is ready.
--**DCLK**: Clock driving the ADC.
--The XADC internally samples the analog signal, digitizes it, and places the result on `DO`.
+- **VP/VN**: Analog differential inputs.
+- **DO[15:0]**: 16-bit output where only the upper 12 bits represent actual data (XADC is 12-bit).
+- **DRDY**: Asserted when new data is ready.
+- **DCLK**: Clock driving the ADC.
+- The XADC internally samples the analog signal, digitizes it, and places the result on `DO`.
 
 🔧 **Internal Signal:**
  ```vhdl
@@ -213,17 +213,17 @@ signal smoothed_val  : integer := 0;
 signal prev_output   : integer := 0;
 
   ```
--`adc_do`: XADC digital output (raw).
--`filtered`: Output that is passed to top_level.
--`raw_val`, `smoothed_val`: Intermediate values for filtering.
+- `adc_do`: XADC digital output (raw).
+- `filtered`: Output that is passed to top_level.
+- `raw_val`, `smoothed_val`: Intermediate values for filtering.
 
 
 🔄 **Conversion Note:**
 ```vhdl
 raw_val <= to_integer(unsigned(adc_do(15 downto 4)));  -- Extract upper 12 bits
 ```
--The lower 4 bits of `DO` are discarded.
--Only bits 15 down to 4 are meaningful and this converts a 12-bit unsigned value to int.
+- The lower 4 bits of `DO` are discarded.
+- Only bits 15 down to 4 are meaningful and this converts a 12-bit unsigned value to int.
 
 
 🧹 **Filtering Logic: IIR Low-Pass:**
@@ -232,8 +232,8 @@ smoothed_val <= (raw_val + (smoothed_val * 7)) / 8;
 
 ```
 This is a **first-order Infinite Impulse Response (IIR)** filter:
--Implements: `y[n] = (x[n] + 7 * y[n−1]) / 8`.
--Smooths the signal by blending 87.5% of the previous output and 12.5% of the current input.
+- Implements: `y[n] = (x[n] + 7 * y[n−1]) / 8`.
+- Smooths the signal by blending 87.5% of the previous output and 12.5% of the current input.
 
     
  ⚙️ **XADC Instantiations:**
