@@ -44,14 +44,14 @@ This FPGA project demonstrates how to digitize and filter an analog signal using
 ## 🔍 File-by-File Breakdown
 
 ## 1.`top_level.vhd`
- 🧩 **Role: System Integrator**
+ 🧠 **Role: System Integrator**
  
  This file defines the **top-level VHDL entity** for the entire system. It glues together the major components:
  - `processing_unit`: captures and filters the analog signal
  - `display_unit`: outputs the filtered result both digitally and visually
  
  
- 🧮 **Interfaces Entity: `top_level`**
+ 🧩 **Interfaces Entity: `top_level`**
   ```vhdl 
 entity top_level is
   port (
@@ -74,7 +74,7 @@ end entity;
  - `leds`: 16-bit binary display of the filtered signal  
  - `seg_cat`, `seg_an`: 7-segment cathode/anode display drivers  
  
-  🧱 **Component Declaration: `processing_unit` and `display_unit`**
+  🏗️ **Component Declaration: `processing_unit` and `display_unit`**
  ```vhdl
  component processing_unit
   port (
@@ -103,7 +103,7 @@ end component;
 ```
 - Converts 16-bit input data to visual output (7-segment + LEDs).
 
- 🧠 **Internal Signal: `processing_unit` and `display_unit`**
+ 🔧  **Internal Signal: `processing_unit` and `display_unit`**
  The top-level logic instantiates both components and connects them through internal signals:
 
  ```vhdl
@@ -111,7 +111,7 @@ end component;
   ```
 - A bridge signal connecting `processing_unit` output to `display_unit` input.
     
- 🕹️ **Component Instantiations: `processing_unit` and `display_unit`**
+ ⚙️ **Component Instantiations: `processing_unit` and `display_unit`**
  ```vhdl
 core : processing_unit
   port map (
@@ -139,7 +139,127 @@ disp : display_unit
 - Feeds filtered signal into display logic.
 - Drives visual hardware outputs.
 
-## 2.`processing_unit`
+## 2.`processing_unit.vhd`
+
+ 🧠 **Role: Signal Acquisition & Filtering**
+ 
+This module captures analog voltage via XADC and performs basic signal smoothing or filtering. It acts as the brain of the signal processing chain.
+
+-Interfaces directly with differential analog inputs (`vp_in`, `vn_in`)
+-Converts analog signal to digital using XADC
+-Applies a simple smoothing filter (like averaging)
+-Outputs a 16-bit digital result (`filtered_out`)
+ 
+ 
+ 🧩 **Interfaces Entity: `processing_unit`**
+  ```vhdl 
+entity processing_unit is
+  port (
+    clk          : in  std_logic;
+    reset        : in  std_logic;
+    vp_in        : in  std_logic;
+    vn_in        : in  std_logic;
+    filtered_out : out std_logic_vector(15 downto 0)
+  );
+end entity;
+```
+ **Inputs**:
+ - `clk`: Main system clock  
+ - `reset`: Global synchronous reset  
+ - `vp_in`, `vn_in`: Differential analog voltage inputs for XADC  
+ 
+ **Outputs**:
+ - `filtered_out`: 16-bit filtered digital signal
+
+ 
+  🏗️ **Component Declaration: `XADC`**
+ ```vhdl
+component XADC
+  port (
+    DCLK        : in  std_logic;
+    RESET       : in  std_logic;
+    VAUXP       : in  std_logic_vector(15 downto 0);
+    VAUXN       : in  std_logic_vector(15 downto 0);
+    VP          : in  std_logic;
+    VN          : in  std_logic;
+    ALM         : out std_logic_vector(7 downto 0);
+    DO          : out std_logic_vector(15 downto 0);
+    DRDY        : out std_logic;
+    DEN         : in  std_logic;
+    DADDR       : in  std_logic_vector(6 downto 0);
+    DWE         : in  std_logic;
+    DI          : in  std_logic_vector(15 downto 0);
+    CONVST      : in  std_logic;
+    CONVSTCLK   : in  std_logic;
+    EOS         : out std_logic;
+    BUSY        : out std_logic
+  );
+end component;
+
+```
+-**VP/VN**: Analog differential inputs.
+-**DO[15:0]**: 16-bit output where only the upper 12 bits represent actual data (XADC is 12-bit).
+-**DRDY**: Asserted when new data is ready.
+-**DCLK**: Clock driving the ADC.
+-The XADC internally samples the analog signal, digitizes it, and places the result on `DO`.
+
+🔧 **Internal Signal:**
+ ```vhdl
+ signal adc_do        : std_logic_vector(15 downto 0);
+signal adc_drdy      : std_logic;
+signal filtered      : std_logic_vector(15 downto 0);
+signal raw_val       : integer := 0;
+signal smoothed_val  : integer := 0;
+signal prev_output   : integer := 0;
+
+  ```
+-`adc_do`: XADC digital output (raw).
+-`filtered`: Output that is passed to top_level.
+-`raw_val`, `smoothed_val`: Intermediate values for filtering.
+
+
+🔄 **Conversion Note:**
+```vhdl
+raw_val <= to_integer(unsigned(adc_do(15 downto 4)));  -- Extract upper 12 bits
+```
+-The lower 4 bits of `DO` are discarded.
+-Only bits 15 down to 4 are meaningful and this converts a 12-bit unsigned value to int.
+
+
+🧹 **Filtering Logic: IIR Low-Pass:**
+```vhdl
+smoothed_val <= (raw_val + (smoothed_val * 7)) / 8;
+
+```
+This is a **first-order Infinite Impulse Response (IIR)** filter:
+-Implements: `y[n] = (x[n] + 7 * y[n−1]) / 8`.
+-Smooths the signal by blending 87.5% of the previous output and 12.5% of the current input.
+
+    
+ ⚙️ **XADC Instantiations:**
+ ```vhdl
+u_xadc : XADC
+  port map (
+    DCLK        => clk,
+    RESET       => reset,
+    VP          => vp_in,
+    VN          => vn_in,
+    VAUXP       => (others => '0'),
+    VAUXN       => (others => '0'),
+    ALM         => alm,
+    DO          => adc_do,
+    DRDY        => adc_drdy,
+    DEN         => den,
+    DADDR       => daddr,
+    DWE         => dwe,
+    DI          => di,
+    CONVST      => convst,
+    CONVSTCLK   => convstclk,
+    EOS         => eos,
+    BUSY        => busy
+  );
+```
+- Drives XADC with clock/reset and collects converted digital output.
 
 
 
