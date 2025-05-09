@@ -103,17 +103,45 @@ end component;
 ```
 - Converts 16-bit input data to visual output (7-segment + LEDs).
 
-    
- 🔗 **Component Instantiations: `processing_unit` and `display_unit` **
-
-
-
- **Internal Signal: `processing_unit` and `display_unit`**
+ 🧠 **Internal Signal: `processing_unit` and `display_unit`**
  The top-level logic instantiates both components and connects them through internal signals:
 
  ```vhdl
  signal filtered : std_logic_vector(15 downto 0);
   ```
---Holds the output from `processing_unit` and input to `display_unit`.
+- A bridge signal connecting `processing_unit` output to `display_unit` input.
+    
+ 🕹️ **Component Instantiations: `processing_unit` and `display_unit`**
+ ```vhdl
+core : processing_unit
+  port map (
+    clk          => clk,
+    reset        => reset,
+    vp_in        => vp_in,
+    vn_in        => vn_in,
+    filtered_out => filtered_signal
+  );
+```
+- Routes clock/reset and analog inputs to the processor.
+- Outputs filtered data to `filtered_signal`.
+
+ ```vhdl
+disp : display_unit
+  port map (
+    clk     => clk,
+    reset   => reset,
+    data_in => filtered_signal,
+    seg_cat => seg_cat,
+    seg_an  => seg_an,
+    leds    => leds
+  );
+```
+- Feeds filtered signal into display logic.
+- Drives visual hardware outputs.
+
+
+
+
+
 
  
