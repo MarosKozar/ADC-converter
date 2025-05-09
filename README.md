@@ -227,7 +227,7 @@ Active-low typically: driving low enables that digit.
 🔠 7-Segment Display - Cathodes
 tcl
 Zkopírovat
-Upravit
+```Upravit
 set_property -dict { PACKAGE_PIN T10 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[0] }]
 set_property -dict { PACKAGE_PIN R10 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[1] }]
 set_property -dict { PACKAGE_PIN K16 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[2] }]
