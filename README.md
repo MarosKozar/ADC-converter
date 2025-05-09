@@ -332,8 +332,7 @@ filtered_out <= filtered;
  | **Binary to BCD Conversion** | 	The signed 16-bit input is converted to an absolute unsigned value for display. |
  | **Digit Extraction** | Extracts individual decimal digits (thousands to units) from the ADC value. |
  | **7-Segment Encoder** |	Converts a digit (0–9) to the corresponding 7-segment encoding. |
- | **Multiplexing Controller** |	Rapidly switches between 4 digits using a refresh counter and `digit_index` signal.
- |
+ | **Multiplexing Controller** |	Rapidly switches between 4 digits using a refresh counter and `digit_index` signal. |
 
 
  
