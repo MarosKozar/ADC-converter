@@ -264,10 +264,10 @@ u_xadc : XADC
 
 
 
-## nexys_A7
+## 5.`nexys_A7`
 
-🔍 Overview
---This XDC file is used in Xilinx Vivado projects to:
+🔍 **Overview**
+This XDC file is used in Xilinx Vivado projects to:
 
 -Assign logical ports in your HDL design (e.g., Verilog/VHDL) to physical pins on the FPGA.
 
@@ -285,7 +285,7 @@ XADC analog input pins
 
 A reset button
 
--🕒 Clock and Timing
+🕒 **Clock and Timing**
 ```
 set_property -dict { PACKAGE_PIN E3 IOSTANDARD LVCMOS33 } [get_ports { clk }]
 create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports { clk }]
@@ -300,9 +300,9 @@ Period = 10 ns → Frequency = 100 MHz.
 
 Waveform {0 5} = 50% duty cycle (clock high for 5ns, low for 5ns).
 
--🧠 Why it's needed: Tells Vivado the timing characteristics of your clock source so it can perform proper static timing analysis.
+🧠 Why it's needed: Tells Vivado the timing characteristics of your clock source so it can perform proper static timing analysis.
 
--⚡️ XADC Analog Inputs
+⚡️ **XADC Analog Inputs**
 
 ```
 set_property -dict { PACKAGE_PIN A13 IOSTANDARD LVCMOS18 } [get_ports { vp_in }]
@@ -312,9 +312,9 @@ These two lines assign vp_in and vn_in ports to A13 and A14, which are dedicated
 
 LVCMOS18 = 1.8V logic standard — required for analog input compatibility.
 
--🧠 Why it's needed: Enables use of onboard sensors or other analog input for digitization within the FPGA.
+🧠 Why it's needed: Enables use of onboard sensors or other analog input for digitization within the FPGA.
 
--🔁 Reset Button
+🔁 **Reset Button**
 ```
 set_property -dict { PACKAGE_PIN N17 IOSTANDARD LVCMOS33 } [get_ports { reset }]
 ```
@@ -322,9 +322,9 @@ Assigns the reset signal (e.g., for resetting a state machine) to pin N17.
 
 Standard 3.3V logic.
 
--🧠 Why it's needed: Provides a way to reset your logic design externally via a button on the board.
+🧠 Why it's needed: Provides a way to reset your logic design externally via a button on the board.
 
--🔢 7-Segment Display - Anodes
+🔢 **7-Segment Display - Anodes**
 ```
 set_property -dict { PACKAGE_PIN J17 IOSTANDARD LVCMOS33 } [get_ports { seg_an[0] }]
 set_property -dict { PACKAGE_PIN J18 IOSTANDARD LVCMOS33 } [get_ports { seg_an[1] }]
@@ -338,7 +338,7 @@ seg_an[0] through seg_an[3] enable each of the 4 digits.
 
 -🧠 Why it's needed: Allows time-multiplexed control of each 7-segment digit.
 
--🔠 7-Segment Display - Cathodes
+🔠 **7-Segment Display - Cathodes**
 ```
 set_property -dict { PACKAGE_PIN T10 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[0] }]
 set_property -dict { PACKAGE_PIN R10 IOSTANDARD LVCMOS33 } [get_ports { seg_cat[1] }]
@@ -352,9 +352,9 @@ These control the individual segments a–g (no decimal point here).
 
 When combined with an anode, lighting specific segments shows numbers or letters.
 
--🧠 Why it's needed: To draw characters on the 7-segment display, your logic activates the correct segments and anodes.
+🧠 Why it's needed: To draw characters on the 7-segment display, your logic activates the correct segments and anodes.
 
--💡 LED Outputs
+💡 **LED Outputs**
 ```
 set_property -dict { PACKAGE_PIN H17 IOSTANDARD LVCMOS33 } [get_ports { leds[15] }]
 ...
