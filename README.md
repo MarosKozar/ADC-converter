@@ -12,6 +12,41 @@ This FPGA project demonstrates how to digitize and filter an analog signal using
 - 📟 Real-time display on 7-segment
 - 💡 LED binary display of filtered data
 - 🧪 VHDL testbench simulation
+---
+## 🕹️ Hardware Overview
+- This photo captures the live testing setup of an analog signal acquisition and filtering system using a Digilent Nexys A7-50T FPGA board, external DC power source, and a breadboard interface:
+![My Diagram](images/graph.png)
+
+🧩 ***Components in the Photo:***
+🔋 **Power Source**
+
+- A programmable DC power supply is shown providing a regulated analog voltage.
+
+- Output voltage in use: 0.10V (shown on display).
+
+📟 **Nexys A7-50T FPGA**
+
+- Hosts the VHDL logic for ADC read, filtering, display, and LED output.
+
+- Connected to PC via USB (for programming and power).
+
+- Seven-segment display actively showing filtered ADC values.
+
+🔌 **Connections**
+
+- JXADC Header (Analog Input):
+
+- AN3P (positive input) → Connected to the positive output of power supply (red wire).
+
+- AN3N (negative input) → Connected to GND of power supply (black wire).
+
+- GND → Common ground shared between FPGA, breadboard, and power source.
+
+🧪 **Breadboard**
+
+- Used for voltage routing and tap points.
+
+- No active components—acts as a connection hub between source and analog pins.
 
 ---
 
@@ -683,7 +718,36 @@ vauxn3 <= '0';
 - These signals mimic analog voltage behavior for simulation purposes.
 ---
 
-## 🔍 Simulation Breakdown
 
+# 🧪 Simulation Full Breakdown
 
- 
+- This simulation illustrates the behavior of the ADC signal filtering module over time, showcasing the interaction between raw input values, analog data, and filtered output.
+
+![My Diagram](images/simulation.png)
+
+- 📈 **Signal Trace Breakdown:**
+    - `seg_cat[6:0]`: Segment control output for display (01)
+
+    - `leds[15:0]` / `filtered_out[15:0]`: Mirror each other, showing the processed analog signal in hexadecimal (0f4e)
+
+    - `filtered_mv` / `raw_mv`: Numeric representation of analog input in millivolts, both incrementing gradual (59 → 60)
+
+    - `analog_in`: Raw analog input value (e.g. 3918, 3976) representing a digitized 12-bit ADC sample
+
+    - `analog_counter`: Simple incrementing counter reflecting sampling index (87 → 90)
+
+- ⏱️ **Timeline:**
+    - At the 963.880 ns mark, the signals show:
+
+    - Stable data transition
+
+    - Properly synchronized sampling across all channels
+
+    - Expected delay between raw_mv and filtered_mv, indicating the effect of the filtering algorithm
+
+- Which fully coresponds to this diagram:
+![My Diagram](images/graph.png)
+
+## 🧱 Schematic
+
+![My Diagram](images/blocks.png)
