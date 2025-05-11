@@ -15,7 +15,7 @@ This FPGA project demonstrates how to digitize and filter an analog signal using
 ---
 ## 🕹️ Hardware Overview
 - This photo captures the live testing setup of an analog signal acquisition and filtering system using a Digilent Nexys A7-50T FPGA board, external DC power source, and a breadboard interface:
-![My Diagram](images/graph.png)
+![My Diagram](images/hardware.png)
 
 🧩 ***Components in the Photo:***
 🔋 **Power Source**
